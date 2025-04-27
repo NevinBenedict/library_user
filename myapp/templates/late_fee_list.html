@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Late Fees</title>
+    <!-- Optional: Include Bootstrap for styling -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1>Unpaid Late Fees</h1>
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Book Title</th>
+                    <th>Amount</th>
+                    <th>Borrow Date</th>
+                    <th>Due Date</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for late_fee in late_fees %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ late_fee.borrowing.book.title }}</td>
+                    <td>${{ late_fee.amount }}</td>
+                    <td>{{ late_fee.borrowing.borrow_date|date:"F j, Y, g:i a" }}</td>
+                    <td>{{ late_fee.borrowing.due_date|date:"F j, Y, g:i a" }}</td>
+                    <td>
+                        <form method="post" action="{% url 'pay_late_fee' late_fee.id %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-success btn-sm">Pay</button>
+                        </form>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6" class="text-center">No unpaid late fees.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <a href="{% url 'book_list' %}" class="btn btn-secondary">Back to Book List</a>
+    </div>
+</body>
+</html>
