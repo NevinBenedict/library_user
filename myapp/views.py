@@ -17,7 +17,7 @@ class Register(View):
         form=Userform(request.POST)
         if form.is_valid():
             User.objects.create_user(**form.cleaned_data)
-            return render (request,"register.html",{'form':form})
+            return redirect("login")
         form = Userform
         return render(request,"register.html",{'form':form})
     
@@ -31,7 +31,7 @@ class Login(View):
         if user:
             login(request,user)
             print(request.user)
-        return redirect("register")
+        return redirect("book_list")
 
 
 class BookCreateView(CreateView):
@@ -71,7 +71,7 @@ class BorrowingcreateView(View):
             Borrowing.objects.create(user=user, book=book, due_date=due_date)
             book.available_copies -= 1
             book.save()
-            return redirect('book_list')
+            return redirect('book_detail', pk=pk)  # Redirect to the book detail page after borrowing
         else:
             return render(request, 'book_detail.html', {'book': book, 'error': 'No available copies'})
         
@@ -115,3 +115,15 @@ class Logout(View):
     def get(self,request):
         logout(request)
         return redirect("login")
+
+class HistoryView(View):
+    def get(self,request):
+        user = request.user
+        borrowings = Borrowing.objects.filter(user=user).exclude(return_date__isnull=True)
+        return render(request, 'history.html', {'borrowings': borrowings})
+    
+class FeeHistoryView(View):
+    def get(self,request):
+        user = request.user
+        late_fees = LateFee.objects.filter(borrowing__user=user, paid=True)
+        return render(request, 'fee_history.html', {'late_fees': late_fees})

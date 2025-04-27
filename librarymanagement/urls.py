@@ -32,6 +32,8 @@ urlpatterns = [
     path('borrowings/', BorrowingListView.as_view(), name='borrowing_list'),  # Add this line for the borrowing list view
     path('borrowings/late_fee/', LatefeeListView.as_view(), name='late_fee_list'),  # Add this line for the late fee creation view
     path('borrowings/<int:pk>/pay_late_fee/', LateFeePaymentView.as_view(), name='pay_late_fee'),  # Add this line for the pay late fee view
+    path('borrow/history/',HistoryView.as_view(), name='borrowing_history'),  # Add this line for the borrowing history view
     path('logout/', Logout.as_view(), name='logout'),  # Add this line for the logout view
+    path('fee/history/',FeeHistoryView.as_view(), name='fee_history'),  # Add this line for the fee history view
 ]   
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -113,8 +113,12 @@
         <h2>Library Management</h2>
         <a href="{% url 'book_list' %}" class="active">Book List</a>
         <a href="{% url 'borrowing_list' %}">My Borrowed Books</a>
+        
+        <a href="{% url 'borrowing_history' %}">Book History</a>
         <a href="{% url 'late_fee_list' %}">Late Fees</a>
+        <a href="{% url 'fee_history' %}">Fee History</a>
         <a href="{% url 'logout' %}">Logout</a>
+
     </div>
 
     <!-- Main Content -->
